@@ -227,4 +227,6 @@
     <color name="recents_dismiss_all_background_color_ripple">#a8a8a8</color>
 
     <color name="brightness_slider_background">#FFFFFF</color>
+
+    <color name="qs_drag_handle_color">#66e5e5e5</color>
 </resources>
