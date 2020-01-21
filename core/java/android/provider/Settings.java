@@ -4958,6 +4958,14 @@ public final class Settings {
 
         /**
          * Did we tell about how they can stop breaking their eyes?
+         * Show data usage in QS header
+         * @hide
+         */
+        public static final String QS_DATAUSAGE = "qs_datausage";
+
+        /**
+         * Whether the battery light should be enabled (if hardware supports it)
+         * The value is boolean (1 or 0).
          * @hide
          */
         public static final String LIVE_DISPLAY_HINTED = "live_display_hinted";
