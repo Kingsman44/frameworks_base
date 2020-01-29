@@ -98,6 +98,4 @@
     <color name="brightness_slider_progress">?android:attr/colorAccent</color>
     <color name="brightness_slider_background">@android:color/black</color>
     <color name="brightness_slider_icons">?android:attr/colorAccent</color>
-
-    <color name="qs_drag_handle_color">#66555555</color>
 </resources>
