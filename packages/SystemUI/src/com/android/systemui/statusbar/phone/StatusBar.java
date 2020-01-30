@@ -1323,6 +1323,10 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     }
 
+    public static void setHasClearableNotifications(boolean state) {
+        mClearableNotifications = state;
+    }
+
     private void brightnessControl(MotionEvent event) {
         final int action = event.getAction();
         final int x = (int) event.getRawX();
