@@ -325,6 +325,17 @@ public class EvolutionUtils {
                 }
             }
         }
+
+        public static void toggleNotifications() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.expandNotificationsPanel();
+                } catch (RemoteException e) {
+                    // do nothing.
+                }
+            }
+        }
     }
 
     public static void sendKeycode(int keycode) {
@@ -409,14 +420,7 @@ public class EvolutionUtils {
 
     // Toggle notifications panel
     public static void toggleNotifications() {
-        IStatusBarService service = getStatusBarService();
-        if (service != null) {
-            try {
-                service.expandNotificationsPanel();
-            } catch (RemoteException e) {
-                // do nothing.
-            }
-        }
+        FireActions.toggleNotifications();
     }
 
     // Toggle qs panel
