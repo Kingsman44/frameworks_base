@@ -49,6 +49,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.net.Uri;
+import android.content.ContentResolver;
+import android.database.ContentObserver;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
@@ -120,6 +123,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
     // Evolution X Additions
     private boolean mBrightnessBottom;
+    private boolean mQSBrightnessSlider;
     private boolean mBrightnessVisible;
     private View mBrightnessPlaceholder;
     private boolean mDualTargetSecondary;
@@ -545,6 +549,36 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
     protected boolean shouldShowDetail() {
         return mExpanded;
+    }
+
+    private final class SettingObserver extends ContentObserver {
+        public SettingObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED),
+                    false, this, UserHandle.USER_ALL);
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+            update();
+        }
+
+        public void update() {
+            mQSBrightnessSlider = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED, 0) != 0;
+
+            if (mQSBrightnessSlider) {
+                removeView(mBrightnessView);
+            }
+
+        }
     }
 
     protected TileRecord addTile(final QSTile tile, boolean collapsedView) {

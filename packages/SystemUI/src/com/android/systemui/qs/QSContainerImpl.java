@@ -120,7 +120,7 @@ public class QSContainerImpl extends FrameLayout implements
         mStatusBarBackground = findViewById(R.id.quick_settings_status_bar_background);
         mBackgroundGradient = findViewById(R.id.quick_settings_gradient_view);
         mSideMargins = getResources().getDimensionPixelSize(R.dimen.notification_side_paddings);
-        mQsBackGround = getContext().getDrawable(R.drawable.qs_background_primary);
+        mQsBackGround = getContext().getDrawable(R.drawable.qs_background_inset);
         mBackgroundImage = findViewById(R.id.qs_header_image_view);
         mBackgroundImage.setClipToOutline(true);
         mColorExtractor = Dependency.get(SysuiColorExtractor.class);
@@ -225,13 +225,14 @@ public class QSContainerImpl extends FrameLayout implements
 
     private void setQsBackground() {
         if (mSetQsFromResources) {
-            mQsBackGround = getContext().getDrawable(R.drawable.qs_background_primary);
+            mQsBackGround = getContext().getDrawable(R.drawable.qs_background_inset);
             try {
                 mOverlayManager.setEnabled("com.android.systemui.qstheme.color",
                         false, ActivityManager.getCurrentUser());
             } catch (RemoteException e) {
                 Log.w("QSContainerImpl", "Can't change qs theme", e);
             }
+
         } else {
             if (mQsBackGround != null) {
                 mQsBackGround.setColorFilter(mCurrentColor, PorterDuff.Mode.SRC_ATOP);

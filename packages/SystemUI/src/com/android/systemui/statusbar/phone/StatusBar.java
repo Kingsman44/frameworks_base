@@ -67,6 +67,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.database.ContentObserver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -716,6 +717,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             (SysuiStatusBarStateController) Dependency.get(StatusBarStateController.class);
 
     private boolean mDisplayCutoutHidden;
+    private boolean mUnexpandedQSBrightnessSlider;
 
     private final KeyguardUpdateMonitorCallback mUpdateCallback =
             new KeyguardUpdateMonitorCallback() {
@@ -2102,6 +2104,23 @@ public class StatusBar extends SystemUI implements DemoMode,
                 try {
                     mOverlayManager.setEnabled("org.pixelexperience.overlay.hidecutout",
                                 mDisplayCutoutHidden, mLockscreenUserManager.getCurrentUserId());
+                } catch (RemoteException ignored) {
+                }
+            });
+        }
+    }
+
+    public void updateBrightnessSliderOverlay() {
+        boolean UnexpandedQSBrightnessSlider = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED, 0, UserHandle.USER_CURRENT) == 1;
+        if (mUnexpandedQSBrightnessSlider != UnexpandedQSBrightnessSlider){
+            mUnexpandedQSBrightnessSlider = UnexpandedQSBrightnessSlider;
+            mUiOffloadThread.submit(() -> {
+                final IOverlayManager mOverlayManager = IOverlayManager.Stub.asInterface(
+                                ServiceManager.getService(Context.OVERLAY_SERVICE));
+                try {
+                    mOverlayManager.setEnabled("com.extendedui.overlay.brightnessslider",
+                                mUnexpandedQSBrightnessSlider, mLockscreenUserManager.getCurrentUserId());
                 } catch (RemoteException ignored) {
                 }
             });
@@ -4575,6 +4594,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.CUSTOM_STATUSBAR_HEIGHT),
                     false, this, UserHandle.USER_ALL);
+	    resolver.registerContentObserver(Settings.System.getUriFor(
+		    Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED),
+		    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -4638,7 +4660,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                 updateSwitchStyle();
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.CUSTOM_STATUSBAR_HEIGHT))) {
                 updateResources();
-            }
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.BRIGHTNESS_SLIDER_QS_UNEXPANDED))) {
+	    	updateBrightnessSliderOverlay();
+	    }
             update();
         }
 

@@ -222,4 +222,8 @@
 
     <color name="recents_dismiss_all_background_color">@android:color/white</color>
     <color name="recents_dismiss_all_icon_color">#8a000000</color>
+
+    <color name="brightness_slider_progress">#FFFFFF</color>
+    <color name="brightness_slider_background">#FFFFFF</color>
+    <color name="brightness_slider_icons">#FFFFFF</color>
 </resources>
