@@ -7368,6 +7368,15 @@ public final class Settings {
         public static final String DISMISS_ALL_BUTTON = "dismiss_all_button";
 
         /**
+         * Controls whether to center R style notification headers
+         * by.tikkiX2
+         * @hide
+         */
+        public static final String SYNTHOS_CENTER_NOTIFICATION_HEADERS = "synthos_center_notification_headers";
+
+        private static final Validator SYNTHOS_CENTER_NOTIFICATION_HEADERS_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -7617,6 +7626,7 @@ public final class Settings {
             VOLUME_ROCKER_WAKE,
             QS_DATAUSAGE,
             VOWIFI_ICON,
+            SYNTHOS_CENTER_NOTIFICATION_HEADERS,
             // Evolution X Settings end
         };
 
@@ -8224,6 +8234,7 @@ public final class Settings {
             VALIDATORS.put(VOLUME_ROCKER_WAKE, VOLUME_ROCKER_WAKE_VALIDATOR);
             VALIDATORS.put(QS_DATAUSAGE, QS_DATAUSAGE_VALIDATOR);
             VALIDATORS.put(VOWIFI_ICON, VOWIFI_ICON_VALIDATOR);
+            VALIDATORS.put(SYNTHOS_CENTER_NOTIFICATION_HEADERS, SYNTHOS_CENTER_NOTIFICATION_HEADERS_VALIDATOR);
             // Evolution X Settings end
         }
 
