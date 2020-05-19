@@ -90,4 +90,6 @@
 
     <color name="ringer_icon_mute">@android:color/white</color>
 
+    <color name="recents_dismiss_all_background_color">@color/volume_background_tint</color>
+    <color name="recents_dismiss_all_icon_color">@android:color/white</color>
 </resources>
