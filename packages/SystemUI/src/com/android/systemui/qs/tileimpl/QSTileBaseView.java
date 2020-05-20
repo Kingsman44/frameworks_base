@@ -19,6 +19,7 @@ import android.annotation.ColorInt;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.ColorUtils;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Path;
@@ -122,9 +123,9 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
 
         mColorActive = Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
         mColorActiveAlpha = adjustAlpha(mColorActive, 0.2f);
-        boolean setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
-                    Settings.System.QS_PANEL_BG_USE_NEW_TINT, 0, UserHandle.USER_CURRENT) == 1;
-        if (setQsUseNewTint) {
+        int setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
+                    Settings.System.QS_PANEL_BG_USE_NEW_TINT, 0, UserHandle.USER_CURRENT);
+        if (setQsUseNewTint != 0) {
             mColorActive = mColorActiveAlpha;
             mColorDisabled = context.getResources().getColor(R.color.qs_tile_background_color_disabled);
         } else {

@@ -29,8 +29,10 @@ import static com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
 
 import android.app.ActivityManager;
 import android.content.res.ColorUtils;
+import android.content.res.Configuration;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.metrics.LogMaker;
 import android.os.Handler;
@@ -73,6 +75,7 @@ import com.android.systemui.qs.QuickStatusBarHeader;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Base quick-settings tile, extend this to create a new tile.
@@ -445,8 +448,9 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                     Settings.System.QS_PANEL_BG_USE_WALL, 0, UserHandle.USER_CURRENT) == 1;
         boolean setQsFromResources = Settings.System.getIntForUser(context.getContentResolver(),
                     Settings.System.QS_PANEL_BG_USE_FW, 1, UserHandle.USER_CURRENT) == 1;
-        boolean setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
-                    Settings.System.QS_PANEL_BG_USE_NEW_TINT, 0, UserHandle.USER_CURRENT) == 1;
+
+        int setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
+                    Settings.System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT);
 
         int qsBackGroundColor = ColorUtils.getValidQsColor(System.getIntForUser(context.getContentResolver(),
                 System.QS_PANEL_BG_COLOR, defaultColor, UserHandle.USER_CURRENT));
@@ -464,10 +468,15 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
             case Tile.STATE_ACTIVE:
                 if (qsTileStyle == 7 || qsTileStyle == 9 || qsTileStyle == 10 || qsTileStyle == 12 ||
                      qsTileStyle == 13 || qsTileStyle == 14) {
-                    return Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
+           	     if (setQsUseNewTint == 1)
+                        return ColorUtils.genRandomAccentColor(isThemeDark(context));
+		     else
+			return Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
                 } else {
                     if (setQsFromResources) {
-                        if (setQsUseNewTint)
+                        if (setQsUseNewTint == 1)
+                            return ColorUtils.genRandomAccentColor(isThemeDark(context));
+                        else if (setQsUseNewTint == 2)
                             return Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
                         else
                             return Utils.getColorAttrDefaultColor(context, android.R.attr.colorPrimary);
@@ -483,6 +492,17 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                 return 0;
         }
     }
+
+    private static Boolean isThemeDark(Context context) {
+        switch (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+            case Configuration.UI_MODE_NIGHT_YES:
+              return true;
+            case Configuration.UI_MODE_NIGHT_NO:
+              return false;
+            default:
+              return false;
+        }
+     }
 
     protected final class H extends Handler {
         private static final int ADD_CALLBACK = 1;
