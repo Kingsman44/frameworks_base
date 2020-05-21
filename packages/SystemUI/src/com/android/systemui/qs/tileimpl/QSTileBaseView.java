@@ -20,6 +20,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.ColorUtils;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Path;
@@ -55,6 +56,7 @@ import com.android.systemui.R;
 import com.android.systemui.plugins.qs.QSIconView;
 import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
+import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
 
@@ -80,22 +82,27 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
     private int mCircleColor;
     private int mBgSize;
 
-    private static Boolean isThemeDark(Context context) {
-        switch (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-            case Configuration.UI_MODE_NIGHT_YES:
-              return true;
-            case Configuration.UI_MODE_NIGHT_NO:
-              return false;
-            default:
-              return false;
-        }
-     }
+    private int setQsUseNewTint;
+    private boolean useFWbg;
+
+
     public QSTileBaseView(Context context, QSIconView icon) {
         this(context, icon, false);
     }
 
     public QSTileBaseView(Context context, QSIconView icon, boolean collapsedView) {
         super(context);
+
+        mIcon = icon;
+        setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
+                    Settings.System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT);
+        useFWbg = Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.QS_PANEL_BG_USE_FW, 1, UserHandle.USER_CURRENT) == 1;
+        setActiveColor(context);
+        mColorInactive = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorSecondary);
+        mColorDisabled = Utils.getDisabled(context,
+                Utils.getColorAttrDefaultColor(context, android.R.attr.textColorTertiary));
+
         // Default to Quick Tile padding, and QSTileView will specify its own padding.
         int padding = context.getResources().getDimensionPixelSize(R.dimen.qs_quick_tile_padding);
         mIconFrame = new FrameLayout(context);
@@ -120,7 +127,6 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
             mBg.setImageResource(R.drawable.ic_qs_circle);
             mIconFrame.addView(mBg);
         }
-        mIcon = icon;
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
                 Gravity.CENTER);
@@ -138,28 +144,36 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
         int setQsUseNewTint = Settings.System.getIntForUser(getContext().getContentResolver(),
                      Settings.System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT);
 
-        if (setQsUseNewTint == 1) {
-            mColorActive = context.getResources().getColor(R.color.qs_tile_background_color_disabled);
-        } else {
-            mColorActive = Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
-        }
-        mColorActiveAlpha = adjustAlpha(mColorActive, 0.2f);
-        if (setQsUseNewTint == 2) {
-            mColorActive = mColorActiveAlpha;
-            mColorDisabled = context.getResources().getColor(R.color.qs_tile_background_color_disabled);
-	} else if (setQsUseNewTint == 1) {
-            mColorDisabled = context.getResources().getColor(R.color.qs_tile_background_color_disabled);
-        } else {
-            mColorDisabled = Utils.getDisabled(context,
-                    Utils.getColorAttrDefaultColor(context, android.R.attr.textColorTertiary));
-        }
-        mColorInactive = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorSecondary);
-
         setPadding(0, 0, 0, 0);
         setClipChildren(false);
         setClipToPadding(false);
         mCollapsedView = collapsedView;
         setFocusable(true);
+    }
+
+    private void setActiveColor(Context context) {
+        if (setQsUseNewTint == 3 && useFWbg) {
+            mColorActive = ColorUtils.genRandomAccentColor(isThemeDark(context), (long) mIcon.toString().hashCode());
+        } else if (setQsUseNewTint == 1 && useFWbg) {
+            mColorActive = QSTileImpl.mRandomColor;
+            mColorActiveAlpha = adjustAlpha(mColorActive, 0.2f);
+            mColorActive = mColorActiveAlpha;
+        } else if (setQsUseNewTint == 2 && useFWbg) {
+            mColorActive = Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
+            mColorActiveAlpha = adjustAlpha(mColorActive, 0.2f);
+            mColorActive = mColorActiveAlpha;
+        }
+    }
+
+    private static Boolean isThemeDark(Context context) {
+        switch (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+            case Configuration.UI_MODE_NIGHT_YES:
+              return true;
+            case Configuration.UI_MODE_NIGHT_NO:
+              return false;
+            default:
+              return false;
+        }
     }
 
     public View getBgCircle() {
@@ -229,6 +243,7 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
     }
 
     public void onStateChanged(QSTile.State state) {
+        setActiveColor(mContext);
         mHandler.obtainMessage(H.STATE_CHANGED, state).sendToTarget();
     }
 
