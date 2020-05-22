@@ -75,6 +75,7 @@ import com.android.systemui.privacy.PrivacyItem;
 import com.android.systemui.privacy.PrivacyItemController;
 import com.android.systemui.privacy.PrivacyItemControllerKt;
 import com.android.systemui.qs.QSDetail.Callback;
+import com.android.systemui.statusbar.info.DataUsageView;
 import com.android.systemui.statusbar.phone.PhoneStatusBarView;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.phone.StatusBarIconController.TintedIconManager;
@@ -154,6 +155,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private Clock mClockView;
     private DateView mDateView;
     private NetworkTraffic mTraffic;
+    private DataUsageView mDataUsageView;
     private OngoingPrivacyChip mPrivacyChip;
     private Space mSpace;
     private BatteryMeterView mBatteryMeterView;
@@ -185,6 +187,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                     this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT), false,
+                    this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.QS_DATAUSAGE), false,
                     this, UserHandle.USER_ALL);
             }
 
@@ -303,7 +308,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mSpace = findViewById(R.id.space);
         mDateView.setOnClickListener(this);
         mTraffic = findViewById(R.id.networkTraffic);
-
+        mDataUsageView = findViewById(R.id.data_sim_usage);
         mRingerModeTextView.setSelected(true);
         mNextAlarmTextView.setSelected(true);
         updateSettings();
@@ -493,6 +498,13 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mBatteryMeterView.updateVisibility();
         mBatteryMeterView.setVisibility(isHideBattIcon ? View.GONE : View.VISIBLE);
     }
+
+     private void updateDataUsageView() {
+        if (mDataUsageView.isDataUsageEnabled())
+            mDataUsageView.setVisibility(View.VISIBLE);
+        else
+            mDataUsageView.setVisibility(View.GONE);
+     }
 
     private void updateSBBatteryStyle() {
         mBatteryMeterView.setBatteryStyle(Settings.System.getInt(mContext.getContentResolver(),
@@ -782,6 +794,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         updateQSClock();
         updateResources();
         updateStatusbarProperties();
+        updateDataUsageView();
     }
 
     // Update color schemes in landscape to use wallpaperTextColor
