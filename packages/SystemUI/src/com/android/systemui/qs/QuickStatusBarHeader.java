@@ -140,9 +140,14 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private int mRingerMode = AudioManager.RINGER_MODE_NORMAL;
     private AlarmManager.AlarmClockInfo mNextAlarm;
 
+
     private boolean mLandscape;
     private boolean mHeaderImageEnabled;
     private int mHeaderImageHeight;
+    // Data Usage
+    private View mDataUsageLayout;
+    private ImageView mDataUsageImage;
+    private DataUsageView mDataUsageView;
 
     private ImageView mNextAlarmIcon;
     /** {@link TextView} containing the actual text indicating when the next alarm will go off. */
@@ -155,7 +160,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private Clock mClockView;
     private DateView mDateView;
     private NetworkTraffic mTraffic;
-    private DataUsageView mDataUsageView;
     private OngoingPrivacyChip mPrivacyChip;
     private Space mSpace;
     private BatteryMeterView mBatteryMeterView;
@@ -308,6 +312,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mSpace = findViewById(R.id.space);
         mDateView.setOnClickListener(this);
         mTraffic = findViewById(R.id.networkTraffic);
+        mDataUsageLayout = findViewById(R.id.daily_data_usage_layout);
+        mDataUsageImage = findViewById(R.id.daily_data_usage_icon);
         mDataUsageView = findViewById(R.id.data_sim_usage);
         mRingerModeTextView.setSelected(true);
         mNextAlarmTextView.setSelected(true);
@@ -500,10 +506,15 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     }
 
      private void updateDataUsageView() {
-        if (mDataUsageView.isDataUsageEnabled() != 0)
+        if (mDataUsageView.isDataUsageEnabled() != 0) {
+            mDataUsageLayout.setVisibility(View.VISIBLE);
+            mDataUsageImage.setVisibility(View.VISIBLE);
             mDataUsageView.setVisibility(View.VISIBLE);
-        else
+        } else {
             mDataUsageView.setVisibility(View.GONE);
+            mDataUsageImage.setVisibility(View.GONE);
+            mDataUsageLayout.setVisibility(View.GONE);
+        }
      }
 
     private void updateSBBatteryStyle() {
