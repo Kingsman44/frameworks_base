@@ -7130,6 +7130,9 @@ public final class Settings {
         private static final Validator BATTERY_BAR_BATTERY_LOW_COLOR_WARNING_VALIDATOR =
                 ANY_INTEGER_VALIDATOR;
 
+        /** @hide */
+        private static final Validator QS_DATAUSAGE_VALIDATOR = ANY_INTEGER_VALIDATOR;
+
         /**
          *  High battery level color of the battery bar
          * @hide
@@ -7543,6 +7546,7 @@ public final class Settings {
             VOLUME_ROCKER_WAKE,
             VOWIFI_ICON,
             VOWIFI_ICON_STYLE,
+            QS_DATAUSAGE
             // Evolution X Settings end
         };
 
@@ -7831,6 +7835,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(VOLUME_ROCKER_WAKE);
             PRIVATE_SETTINGS.add(VOWIFI_ICON);
             PRIVATE_SETTINGS.add(VOWIFI_ICON_STYLE);
+            PRIVATE_SETTINGS.add(QS_DATAUSAGE);
             // Evolution X Settings end
         }
 
@@ -8149,6 +8154,7 @@ public final class Settings {
             VALIDATORS.put(VOLUME_ROCKER_WAKE, VOLUME_ROCKER_WAKE_VALIDATOR);
             VALIDATORS.put(VOWIFI_ICON, VOWIFI_ICON_VALIDATOR);
             VALIDATORS.put(VOWIFI_ICON_STYLE, VOWIFI_ICON_STYLE_VALIDATOR);
+            VALIDATORS.put(QS_DATAUSAGE, QS_DATAUSAGE_VALIDATOR);
             // Evolution X Settings end
         }
 

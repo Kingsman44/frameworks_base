@@ -547,7 +547,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             mLinger = BRIGHTNESS_CONTROL_LINGER_THRESHOLD + 1;
         }
     };
-    private boolean dataupdated = false;
 
     public ImageView mQSBlurView;
     private boolean blurperformed = false;
@@ -1249,9 +1248,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         float QSBlurAlpha = mNotificationPanel.getExpandedFraction() * (float)((float) QSUserAlpha / 100.0);
         boolean enoughBlurData = (QSBlurAlpha > 0 && qsBlurIntensity() > 0);
 
-        if (QSBlurAlpha > 0 && !dataupdated && !mIsKeyguard) {
-            DataUsageView.updateUsage();
-            dataupdated = true;
+        if (QSBlurAlpha > 0 && !mIsKeyguard) {
         }
         if (enoughBlurData && !blurperformed && !mIsKeyguard && isQSBlurEnabled()) {
             drawBlurView();
@@ -4755,6 +4752,10 @@ public class StatusBar extends SystemUI implements DemoMode,
                 Settings.System.GAMING_MODE_HEADSUP_TOGGLE, 1,
                 UserHandle.USER_CURRENT);
         mNotificationInterruptionStateProvider.setGamingPeekMode(mGamingModeActivated, mHeadsUpDisabled);
+    }
+
+    public void updateQSDataUsageInfo() {
+        DataUsageView.updateUsage();
     }
 
     private void setHideArrowForBackGesture() {
