@@ -7225,6 +7225,12 @@ public final class Settings {
         public static final Validator NAVIGATION_BAR_MENU_ARROW_KEYS_VALIDATOR =
                 BOOLEAN_VALIDATOR;
 
+          /**
+           * Whether show/hide things in volume panel
+           * @hide
+           */
+          public static final String HIDE_THINGS_VOLUMEPANEL = "hide_things_volumepanel";
+
         /**
          * Whether touch hovering is enabled on supported hardware
          * @hide
