@@ -570,8 +570,6 @@ public class VolumeDialogImpl implements VolumeDialog,
         if (mMediaOutputView != null) {
             mMediaOutputView.setVisibility(
                     mDeviceProvisionedController.isCurrentUserSetup() &&
-                            mActivityManager.getLockTaskModeState() == LOCK_TASK_MODE_NONE
-                            VISIBLE : GONE);
                             mActivityManager.getLockTaskModeState() == LOCK_TASK_MODE_NONE &&
                             isBluetoothA2dpConnected() ? VISIBLE : GONE);
         }

@@ -1256,7 +1256,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             mQSBlurView.setVisibility(View.VISIBLE);
         } else if (!enoughBlurData || mState == StatusBarState.KEYGUARD) {
             blurperformed = false;
-	    dataupdated = false;
             mQSBlurView.setVisibility(View.GONE);
         }
         mQSBlurView.setAlpha(QSBlurAlpha);
