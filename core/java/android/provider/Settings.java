@@ -6129,24 +6129,6 @@ public final class Settings {
         public static final Validator VOLTE_ICON_STYLE_VALIDATOR = ANY_INTEGER_VALIDATOR;
 
         /**
-         * Whether to show VoWiFi icon or not
-         * @hide
-         */
-        public static final String VOWIFI_ICON = "vowifi_icon";
-
-        /** @hide */
-        public static final Validator VOWIFI_ICON_VALIDATOR = ANY_INTEGER_VALIDATOR;
-
-        /**
-         * VoWiFi icon style
-         * @hide
-         */
-        public static final String VOWIFI_ICON_STYLE = "vowifi_icon_style";
-
-        /** @hide */
-        public static final Validator VOWIFI_ICON_STYLE_VALIDATOR = ANY_INTEGER_VALIDATOR;
-
-        /**
          * Whether to blink flashlight for incoming calls
          * 0 = Disabled (Default)
          * 1 = Blink flashlight only in Ringer mode
@@ -7568,8 +7550,6 @@ public final class Settings {
             VOLUME_BUTTON_MUSIC_CONTROL,
             VOLUME_KEY_CURSOR_CONTROL,
             VOLUME_ROCKER_WAKE,
-            VOWIFI_ICON,
-            VOWIFI_ICON_STYLE,
             QS_DATAUSAGE
             // Evolution X Settings end
         };
@@ -7857,8 +7837,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(VOLUME_BUTTON_MUSIC_CONTROL);
             PRIVATE_SETTINGS.add(VOLUME_KEY_CURSOR_CONTROL);
             PRIVATE_SETTINGS.add(VOLUME_ROCKER_WAKE);
-            PRIVATE_SETTINGS.add(VOWIFI_ICON);
-            PRIVATE_SETTINGS.add(VOWIFI_ICON_STYLE);
             PRIVATE_SETTINGS.add(QS_DATAUSAGE);
             // Evolution X Settings end
         }
@@ -8176,8 +8154,6 @@ public final class Settings {
             VALIDATORS.put(VOLUME_BUTTON_MUSIC_CONTROL, VOLUME_BUTTON_MUSIC_CONTROL_VALIDATOR);
             VALIDATORS.put(VOLUME_KEY_CURSOR_CONTROL, VOLUME_KEY_CURSOR_CONTROL_VALIDATOR);
             VALIDATORS.put(VOLUME_ROCKER_WAKE, VOLUME_ROCKER_WAKE_VALIDATOR);
-            VALIDATORS.put(VOWIFI_ICON, VOWIFI_ICON_VALIDATOR);
-            VALIDATORS.put(VOWIFI_ICON_STYLE, VOWIFI_ICON_STYLE_VALIDATOR);
             VALIDATORS.put(QS_DATAUSAGE, QS_DATAUSAGE_VALIDATOR);
             // Evolution X Settings end
         }
