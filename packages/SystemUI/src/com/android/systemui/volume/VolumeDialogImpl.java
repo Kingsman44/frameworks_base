@@ -391,8 +391,8 @@ public class VolumeDialogImpl implements VolumeDialog,
                     R.drawable.ic_volume_media, R.drawable.ic_volume_media_mute, true, true);
             if (!AudioSystem.isSingleVolume(mContext)) {
                 if (Util.isVoiceCapable(mContext)) {
-                addRow(AudioManager.STREAM_RING,
-                        R.drawable.ic_volume_ringer, R.drawable.ic_volume_ringer_mute, true, false);
+                    addRow(AudioManager.STREAM_RING, R.drawable.ic_volume_ringer,
+                            R.drawable.ic_volume_ringer_mute, true, false);
                 } else {
                     addRow(AudioManager.STREAM_NOTIFICATION, R.drawable.ic_volume_notification,
                             R.drawable.ic_volume_notification_mute, true, false);
@@ -422,6 +422,7 @@ public class VolumeDialogImpl implements VolumeDialog,
 
         settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
+
     }
 	
 	private void hideThings() {
@@ -933,21 +934,6 @@ public class VolumeDialogImpl implements VolumeDialog,
         boolean isActive = row.stream == activeRow.stream;
 
         if (isActive) {
-            return true;
-        }
-        if(row.stream == AudioManager.STREAM_RING && isRingerShowing){
-            return true;
-        }
-        if(row.stream == AudioManager.STREAM_NOTIFICATION && isNotificationShowing){
-            return true;
-        }
-        if(row.stream == AudioManager.STREAM_ALARM && isAlarmShowing){
-            return true;
-        }
-        if(row.stream == AudioManager.STREAM_VOICE_CALL && isVoiceShowing){
-            return true;
-        }
-        if(row.stream == AudioManager.STREAM_BLUETOOTH_SCO && isBTSCOShowing){
             return true;
         }
 
