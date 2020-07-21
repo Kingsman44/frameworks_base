@@ -546,7 +546,6 @@ public class Process {
      * @param invokeWith null-ok the command to invoke with.
      * @param packageName null-ok the name of the package this process belongs to.
      * @param zygotePolicyFlags Flags used to determine how to launch the application
-     * @param isTopApp whether the process starts for high priority application.
      * @param zygoteArgs Additional arguments to supply to the zygote process.
      * @return An object that describes the result of the attempt to start the process.
      * @throws RuntimeException on fatal start failure
@@ -566,12 +565,11 @@ public class Process {
                                            @Nullable String invokeWith,
                                            @Nullable String packageName,
                                            int zygotePolicyFlags,
-                                           boolean isTopApp,
                                            @Nullable String[] zygoteArgs) {
         return ZYGOTE_PROCESS.start(processClass, niceName, uid, gid, gids,
                     runtimeFlags, mountExternal, targetSdkVersion, seInfo,
                     abi, instructionSet, appDataDir, invokeWith, packageName,
-                    zygotePolicyFlags, isTopApp, zygoteArgs);
+                    zygotePolicyFlags, zygoteArgs);
     }
 
     /** @hide */
@@ -591,8 +589,7 @@ public class Process {
         return WebViewZygote.getProcess().start(processClass, niceName, uid, gid, gids,
                     runtimeFlags, mountExternal, targetSdkVersion, seInfo,
                     abi, instructionSet, appDataDir, invokeWith, packageName,
-                    /*zygotePolicyFlags=*/ ZYGOTE_POLICY_FLAG_EMPTY, /*isTopApp=*/ false,
-                    zygoteArgs);
+                    /*zygotePolicyFlags=*/ ZYGOTE_POLICY_FLAG_EMPTY, zygoteArgs);
     }
 
     /**
