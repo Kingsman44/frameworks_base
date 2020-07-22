@@ -119,6 +119,9 @@ public class QSTileView extends QSTileBaseView {
     @Override
     protected void handleStateChanged(QSTile.State state) {
         super.handleStateChanged(state);
+        int setQsUseNewTint = Settings.System.getIntForUser(getContext().getContentResolver(),
+                     Settings.System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT);
+
         if (!Objects.equals(mLabel.getText(), state.label) || mState != state.state) {
             mLabel.setTextColor(state.state == Tile.STATE_UNAVAILABLE ? mColorLabelUnavailable
                     : mColorLabelDefault);
@@ -130,6 +133,16 @@ public class QSTileView extends QSTileBaseView {
             mSecondLine.setVisibility(TextUtils.isEmpty(state.secondaryLabel) ? View.GONE
                     : View.VISIBLE);
         }
+        if (state.state == Tile.STATE_ACTIVE) {
+            if (setQsUseNewTint == 1) {
+                mLabel.setTextColor(QSTileImpl.mRandomColor);
+            } else {
+                mLabel.setTextColor(mColorLabelDefault);
+            }
+        } else if (state.state == Tile.STATE_INACTIVE) {
+            mLabel.setTextColor(mColorLabelDefault);
+        }
+
         boolean dualTarget = DUAL_TARGET_ALLOWED && state.dualTarget;
         mExpandIndicator.setVisibility(dualTarget ? View.VISIBLE : View.GONE);
         mExpandSpace.setVisibility(dualTarget ? View.VISIBLE : View.GONE);

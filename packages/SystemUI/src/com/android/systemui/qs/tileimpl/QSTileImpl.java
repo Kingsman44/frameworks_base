@@ -113,6 +113,7 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
     private EnforcedAdmin mEnforcedAdmin;
     private boolean mShowingDetail;
     private int mIsFullQs;
+    public static int mRandomColor;
 
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
 
@@ -444,6 +445,8 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
     public static int getColorForState(Context context, int state) {
         int defaultColor = ColorUtils.genRandomQsColor();
 
+	mRandomColor = ColorUtils.genRandomAccentColor(isThemeDark(context));
+
         boolean setQsFromWall = Settings.System.getIntForUser(context.getContentResolver(),
                     Settings.System.QS_PANEL_BG_USE_WALL, 0, UserHandle.USER_CURRENT) == 1;
         boolean setQsFromResources = Settings.System.getIntForUser(context.getContentResolver(),
@@ -469,13 +472,13 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                 if (qsTileStyle == 7 || qsTileStyle == 9 || qsTileStyle == 10 || qsTileStyle == 12 ||
                      qsTileStyle == 13 || qsTileStyle == 14) {
            	     if (setQsUseNewTint == 1)
-                        return ColorUtils.genRandomAccentColor(isThemeDark(context));
+                        return mRandomColor;
 		     else
 			return Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
                 } else {
                     if (setQsFromResources) {
                         if (setQsUseNewTint == 1)
-                            return ColorUtils.genRandomAccentColor(isThemeDark(context));
+                            return mRandomColor;
                         else if (setQsUseNewTint == 2)
                             return Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
                         else

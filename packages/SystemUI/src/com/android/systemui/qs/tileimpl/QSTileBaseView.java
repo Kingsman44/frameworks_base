@@ -45,7 +45,11 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.content.res.ColorUtils;
+import java.util.Random;
+import android.content.res.Configuration;
 
+import android.provider.Settings;
 import com.android.settingslib.Utils;
 import com.android.systemui.R;
 import com.android.systemui.plugins.qs.QSIconView;
@@ -76,6 +80,16 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
     private int mCircleColor;
     private int mBgSize;
 
+    private static Boolean isThemeDark(Context context) {
+        switch (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+            case Configuration.UI_MODE_NIGHT_YES:
+              return true;
+            case Configuration.UI_MODE_NIGHT_NO:
+              return false;
+            default:
+              return false;
+        }
+     }
     public QSTileBaseView(Context context, QSIconView icon) {
         this(context, icon, false);
     }
@@ -121,12 +135,19 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
         setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
         setBackground(mTileBackground);
 
-        mColorActive = Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
+        int setQsUseNewTint = Settings.System.getIntForUser(getContext().getContentResolver(),
+                     Settings.System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT);
+
+        if (setQsUseNewTint == 1) {
+            mColorActive = context.getResources().getColor(R.color.qs_tile_background_color_disabled);
+        } else {
+            mColorActive = Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
+        }
         mColorActiveAlpha = adjustAlpha(mColorActive, 0.2f);
-        int setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
-                    Settings.System.QS_PANEL_BG_USE_NEW_TINT, 0, UserHandle.USER_CURRENT);
-        if (setQsUseNewTint != 0) {
+        if (setQsUseNewTint == 2) {
             mColorActive = mColorActiveAlpha;
+            mColorDisabled = context.getResources().getColor(R.color.qs_tile_background_color_disabled);
+	} else if (setQsUseNewTint == 1) {
             mColorDisabled = context.getResources().getColor(R.color.qs_tile_background_color_disabled);
         } else {
             mColorDisabled = Utils.getDisabled(context,
