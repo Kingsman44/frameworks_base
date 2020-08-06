@@ -1706,12 +1706,13 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     public int getStatusBarHeight() {
-        if (mNaturalBarHeight < 0) {
-            final Resources res = mContext.getResources();
-            mNaturalBarHeight =
-                    res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
-        }
-        return mNaturalBarHeight;
+        return getCustomStatusBarHeight();
+    }
+
+    private int getCustomStatusBarHeight() {
+        final Resources res = mContext.getResources();
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.CUSTOM_STATUSBAR_HEIGHT, res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height));
     }
 
     protected boolean toggleSplitScreenMode(int metricsDockAction, int metricsUndockAction) {
@@ -3301,8 +3302,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         final Resources res = mContext.getResources();
 
         int oldBarHeight = mNaturalBarHeight;
-        mNaturalBarHeight = res.getDimensionPixelSize(
-                com.android.internal.R.dimen.status_bar_height);
+        mNaturalBarHeight = getCustomStatusBarHeight();
         if (mStatusBarWindowController != null && mNaturalBarHeight != oldBarHeight) {
             mStatusBarWindowController.setBarHeight(mNaturalBarHeight);
         }
@@ -4572,6 +4572,9 @@ public class StatusBar extends SystemUI implements DemoMode,
 	    resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SWITCH_STYLE),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.CUSTOM_STATUSBAR_HEIGHT),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -4633,8 +4636,10 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.SWITCH_STYLE))) {
                 stockSwitchStyle();
                 updateSwitchStyle();
-	    }
-	    update();
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.CUSTOM_STATUSBAR_HEIGHT))) {
+                updateResources();
+            }
+            update();
         }
 
         public void update() {

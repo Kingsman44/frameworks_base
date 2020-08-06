@@ -6836,8 +6836,20 @@ public final class Settings {
                 BOOLEAN_VALIDATOR;
 
         /**
+         * Statusbar hight value for manual mode
+         *
+         * @hide
+         */
+        public static final String CUSTOM_STATUSBAR_HEIGHT = "custom_statusbar_height";
+
+        /** @hide */
+        private static final Validator CUSTOM_STATUSBAR_HEIGHT_VALIDATOR =
+                ANY_INTEGER_VALIDATOR;
+
+        /**
          * Whether or not to send device back to sleep if Camera button is released ("Peek")
          * 0 = 0ff, 1 = on
+
          */
         public static final String CAMERA_SLEEP_ON_RELEASE = "camera_sleep_on_release";
 
@@ -7633,6 +7645,7 @@ public final class Settings {
             VOLUME_ROCKER_WAKE,
             QS_DATAUSAGE,
             VOWIFI_ICON,
+            CUSTOM_STATUSBAR_HEIGHT,
             SYNTHOS_CENTER_NOTIFICATION_HEADERS,
             // Evolution X Settings end
         };
@@ -7923,6 +7936,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(VOLUME_ROCKER_WAKE);
             PRIVATE_SETTINGS.add(QS_DATAUSAGE);
             PRIVATE_SETTINGS.add(VOWIFI_ICON);
+            PRIVATE_SETTINGS.add(CUSTOM_STATUSBAR_HEIGHT);
             // Evolution X Settings end
         }
 
@@ -8241,6 +8255,7 @@ public final class Settings {
             VALIDATORS.put(VOLUME_ROCKER_WAKE, VOLUME_ROCKER_WAKE_VALIDATOR);
             VALIDATORS.put(QS_DATAUSAGE, QS_DATAUSAGE_VALIDATOR);
             VALIDATORS.put(VOWIFI_ICON, VOWIFI_ICON_VALIDATOR);
+            VALIDATORS.put(CUSTOM_STATUSBAR_HEIGHT, CUSTOM_STATUSBAR_HEIGHT_VALIDATOR);
             VALIDATORS.put(SYNTHOS_CENTER_NOTIFICATION_HEADERS, SYNTHOS_CENTER_NOTIFICATION_HEADERS_VALIDATOR);
             // Evolution X Settings end
         }
