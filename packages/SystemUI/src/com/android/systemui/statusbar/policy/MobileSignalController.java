@@ -478,6 +478,10 @@ public class MobileSignalController extends SignalController<
                 case 8:
                     resId = R.drawable.ic_volte_emui;
                     break;
+                // OOS 10 VoLTE icon
+               case 9:
+                    resId = R.drawable.ic_volte_oos10;
+                    break;
             }
         } else if ((mDataNetType == TelephonyManager.NETWORK_TYPE_LTE
                 || mDataNetType == TelephonyManager.NETWORK_TYPE_LTE_CA)
