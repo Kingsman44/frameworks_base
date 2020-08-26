@@ -100,8 +100,7 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
                 Settings.System.QS_PANEL_BG_USE_FW, 1, UserHandle.USER_CURRENT) == 1;
         setActiveColor(context);
         mColorInactive = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorSecondary);
-        mColorDisabled = Utils.getDisabled(context,
-                Utils.getColorAttrDefaultColor(context, android.R.attr.textColorTertiary));
+        mColorDisabled = context.getResources().getColor(R.color.qs_tile_background_color_disabled);
 
         // Default to Quick Tile padding, and QSTileView will specify its own padding.
         int padding = context.getResources().getDimensionPixelSize(R.dimen.qs_quick_tile_padding);
